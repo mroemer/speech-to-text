@@ -6,6 +6,8 @@ import os
 from tasks.unzip_utils import unzip_aac_files
 from tasks.audio_conversion import convert_aac_to_wav
 from tasks.whisper_segments import transcribe_with_timestamps
+from tasks.detect_voice_activity import detect_voice_activity
+from tasks.filter_overlapping_segments import filter_overlapping_segments
 from tasks.transcript_merger import merge_segments
 
 @flow
@@ -21,7 +23,9 @@ def full_stt_pipeline(zip_file: str,
         speaker = Path(aac_file).stem.split("-")[1].replace("_", "").replace(".", "")
         wav_file = aac_file.replace(".aac", ".wav")
         wav_path = convert_aac_to_wav(aac_file, wav_file)
-        segments = transcribe_with_timestamps(wav_path, speaker, language, whisper_model)
+        raw_segments = transcribe_with_timestamps(wav_path, speaker, language, whisper_model)
+        speech_timestamps = detect_voice_activity(wav_path)
+        segments = filter_overlapping_segments(raw_segments, speech_timestamps)
         all_segments.append(segments)
 
     output_path = os.path.join(output_dir, "final_transcript.txt")
