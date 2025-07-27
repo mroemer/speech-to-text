@@ -3,14 +3,14 @@ import whisper
 from pathlib import Path
 from prefect import task
 
-model = whisper.load_model("base")
 
 @task
-def transcribe_with_timestamps(audio_path: str, speaker_label: str, language: str) -> list:
+def transcribe_with_timestamps(audio_path: str, speaker_label: str, language: str, whisper_model: str) -> list:
     cache_path = Path("outputs") / (Path(audio_path).stem + ".json")
     if cache_path.exists():
         return json.loads(cache_path.read_text())
 
+    model = whisper.load_model(whisper_model)
     result = model.transcribe(audio_path, language=language, verbose=False)
     segments = result["segments"]
     for seg in segments:
