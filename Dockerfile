@@ -11,4 +11,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["python", "flows/combined_transcription_flow.py", "inputs/aac_files.zip"]
+CMD ["python", "flows/combined_transcription_flow.py"]
