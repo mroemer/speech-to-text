@@ -1,0 +1,6 @@
+# inputs and outputs
+inputs
+outputs
+# Python
+.venv
+__pycache__
