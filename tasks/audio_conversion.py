@@ -4,6 +4,8 @@ from prefect import task
 
 @task
 def convert_aac_to_wav(aac_path: str, wav_path: str) -> str:
+    if Path(wav_path).exists():
+        return wav_path
     ffmpeg.input(aac_path).output(
         wav_path,
         format='wav',
