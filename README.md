@@ -9,6 +9,7 @@ Transcripts are created using [Whisper by OpenAI](https://openai.com/index/whisp
 1. Activate the `venv`
 
    ```sh
+   python3 -m venv .venv
    source .venv/bin/activate
    ```
 
