@@ -6,6 +6,13 @@ Transcripts are created using [Whisper by OpenAI](https://openai.com/index/whisp
 
 ## Usage
 
+1. Install `ffmpeg`
+
+   ```sh
+   sudo apt update
+   sudo apt install ffmpeg
+   ```
+
 1. Activate the `venv`
 
    ```sh
@@ -13,13 +20,13 @@ Transcripts are created using [Whisper by OpenAI](https://openai.com/index/whisp
    source .venv/bin/activate
    ```
 
-2. Install Python dependencies
+1. Install Python dependencies
 
    ```sh
    pip install --upgrade pip
    pip install -r requirements.txt
    ```
-3. Run the pipeline
+1. Run the pipeline
 
    ```sh
    PYTHONPATH=. python flows/combined_transcription_flow.py inputs/aac_files.zip --whisper_model medium
