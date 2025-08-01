@@ -4,8 +4,8 @@ from pathlib import Path
 from prefect import task
 
 @task
-def detect_voice_activity(audio_path: str) -> list:
-    cache_path = Path("outputs") / Path("vad") / (Path(audio_path).stem + ".json")
+def detect_voice_activity(audio_path: str, cache_dir: str) -> list:
+    cache_path = Path(cache_dir) / Path("vad") / (Path(audio_path).stem + ".json")
     if cache_path.exists():
         return json.loads(cache_path.read_text())
 

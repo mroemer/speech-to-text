@@ -5,8 +5,8 @@ from prefect import task
 
 
 @task
-def transcribe_with_timestamps(audio_path: str, speaker_label: str, language: str, whisper_model: str) -> list:
-    cache_path = Path("outputs") / (Path(audio_path).stem + ".json")
+def transcribe_with_timestamps(audio_path: str, speaker_label: str, language: str, whisper_model: str, cache_dir: str) -> list:
+    cache_path = Path(cache_dir) / (Path(audio_path).stem + ".json")
     if cache_path.exists():
         return json.loads(cache_path.read_text())
 

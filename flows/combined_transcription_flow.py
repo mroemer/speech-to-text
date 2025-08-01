@@ -23,8 +23,8 @@ def full_stt_pipeline(zip_file: str,
         speaker = Path(aac_file).stem.split("-")[1].replace("_", "").replace(".", "")
         wav_file = aac_file.replace(".aac", ".wav")
         wav_path = convert_aac_to_wav(aac_file, wav_file)
-        raw_segments = transcribe_with_timestamps(wav_path, speaker, language, whisper_model)
-        speech_timestamps = detect_voice_activity(wav_path)
+        raw_segments = transcribe_with_timestamps(wav_path, speaker, language, whisper_model, cache_dir=output_dir)
+        speech_timestamps = detect_voice_activity(wav_path, cache_dir=output_dir)
         segments = filter_overlapping_segments(raw_segments, speech_timestamps)
         all_segments.append(segments)
 
