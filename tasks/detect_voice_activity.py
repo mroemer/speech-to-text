@@ -15,7 +15,7 @@ def detect_voice_activity(audio_path: str, cache_dir: str) -> list:
 
     # filter segments based on (voice activation detection)
     wav = read_audio(audio_path, sampling_rate=16000)
-    speech_timestamps = get_speech_timestamps(wav, vad_model, sampling_rate=16000, return_seconds=True)
+    speech_timestamps = get_speech_timestamps(wav, vad_model, sampling_rate=16000)
     cache_path.parent.mkdir(exist_ok=True)
     cache_path.write_text(json.dumps(speech_timestamps, indent=2))
 

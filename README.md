@@ -2,7 +2,7 @@
 
 A Prefect-based pipeline to extract and merge transcripts from zipped AAC files.
 
-Transcripts are created using [Whisper by OpenAI](https://openai.com/index/whisper/) and filtered with Voice Activation Detection using [Silero VAD](https://github.com/snakers4/silero-vad).
+Transcripts are created using [Whisper by OpenAI](https://openai.com/index/whisper/) after extracting speech segments with Voice Activation Detection using [Silero VAD](https://github.com/snakers4/silero-vad).
 
 ## Usage
 

@@ -7,5 +7,9 @@ def merge_segments(all_segments: list, output_path: str):
 
     with open(output_path, "w", encoding="utf-8") as f:
         for s in flat:
+            # skip common artifacts
+            if s['text'] == ' Vielen Dank.':
+                continue
+
             ts = f"{s['start']:.2f}-{s['end']:.2f}"
-            f.write(f"[{ts}] {s['speaker']}: {s['text']}\n")
+            f.write(f"[{ts}] {s['speaker']}:{s['text']}\n")
