@@ -26,7 +26,12 @@ def transcribe_with_timestamps(wav_folder: str, speaker_label: str, language: st
             all_segments.extend(segments)
             continue
 
-        result = model.transcribe(str(wav_file), language=language, verbose=False)
+        result = model.transcribe(
+            str(wav_file),
+            language=language,
+            verbose=False,
+            fp16=False # disable fp16 if running on CPU
+        )
         segments = result["segments"]
         for seg in segments:
             seg["speaker"] = speaker_label
