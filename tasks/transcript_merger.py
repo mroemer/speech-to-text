@@ -22,5 +22,4 @@ def merge_segments(all_segments: list, output_path: str):
                     speaker_name = yaml.safe_load(fh) or {}
             speaker = speaker_name.get(s["speaker"], s["speaker"])
 
-            ts = f"{s['start']:.2f}-{s['end']:.2f}"
-            f.write(f"[{ts}] {speaker}:{s['text']}\n")
+            f.write(f"{speaker}:{s['text']}\n")
