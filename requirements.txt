@@ -1,5 +1,8 @@
 ffmpeg-python
 openai-whisper
 prefect
+scipy
+soundfile
 torch
 torchaudio
+torchcodec
