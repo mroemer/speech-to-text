@@ -42,7 +42,7 @@ if __name__ == "__main__":
     parser.add_argument("zip_file", type=str, help="Path to the input zip file containing AAC files")
     parser.add_argument("--language", type=str, default="de", help="Language to use for transcription (default: de)")
     parser.add_argument("--output_dir", type=str, default="outputs", help="Directory to save output files")
-    parser.add_argument("--whisper_model", type=str, default="medium", choices=["tiny", "base", "small", "medium", "large"],
+    parser.add_argument("--whisper_model", type=str, default="medium", choices=["tiny", "base", "small", "medium", "large", "large-v2", "large-v3"],
                         help="Whisper model to use (default: medium)")
 
     args = parser.parse_args()
