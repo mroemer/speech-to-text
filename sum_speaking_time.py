@@ -18,13 +18,13 @@ def human_duration(seconds: float) -> str:
 
     parts = []
     if hours:
-        parts.append(f"{hours}h")
-    if minutes:
-        parts.append(f"{minutes}m")
+        parts.append(f"{hours:>2}h")
+    if minutes or hours:
+        parts.append(f"{minutes:>2}m")
 
     if remaining or not parts:
         if remaining == int(remaining):
-            parts.append(f"{int(remaining)}s")
+            parts.append(f"{int(remaining):>2}s")
         else:
             parts.append(f"{remaining:.3f}s")
 
@@ -107,6 +107,19 @@ def main() -> None:
                 "word_count": word_count,
             }
         )
+    
+    # merge rows by speaker
+    merged_rows = {}
+    for row in rows:
+        speaker = row["speaker"]
+        if speaker not in merged_rows:
+            merged_rows[speaker] = row
+            merged_rows[speaker]["sessions"] = 1
+        else:
+            merged_rows[speaker]["seconds"] += row["seconds"]
+            merged_rows[speaker]["word_count"] += row["word_count"]
+            merged_rows[speaker]["sessions"] += 1
+    rows = list(merged_rows.values())
 
     if args.sort == "time":
         rows.sort(key=lambda row: row["seconds"], reverse=True)
@@ -116,8 +129,8 @@ def main() -> None:
         rows.sort(key=lambda row: row["file"].casefold())
 
 
-    print(f"{'Speaker':<24} {'Time':>14} {'Seconds':>9} {'Words':>8} {'Share':>8}")
-    print("-" * 67)
+    print(f"{'Speaker':<16} {'Time':>11} {'Seconds':>9} {'Words':>7} {'Share':>7} {'Sessions':>8}")
+    print("-" * 63)
 
     for row in rows:
         if speaker_name_file.exists():
@@ -127,20 +140,22 @@ def main() -> None:
 
         share = row["seconds"] / grand_total * 100 if grand_total else 0.0
         print(
-            f"{speaker:<24} "
-            f"{human_duration(row['seconds']):>14} "
+            f"{speaker:<16} "
+            f"{human_duration(row['seconds']):>11} "
             f"{int(row['seconds']):>9} "
-            f"{row['word_count']:>8} "
-            f"{share:>7.2f}%"
+            f"{row['word_count']:>7} "
+            f"{share:>6.1f}% "
+            f"{row['sessions']:>8}"
         )
 
-    print("-" * 67)
+    print("-" * 63)
     print(
-        f"{'TOTAL':<24} "
-        f"{human_duration(grand_total):>14} "
+        f"{'TOTAL':<16} "
+        f"{human_duration(grand_total):>11} "
         f"{int(grand_total):>9} "
-        f"{sum(row['word_count'] for row in rows):>8} "
-        f"{100.00:>7.2f}%"
+        f"{sum(row['word_count'] for row in rows):>7} "
+        f"{100.0:>6.1f}% "
+        f"{max(row['sessions'] for row in rows):>8}"
     )
 
 
