@@ -1,6 +1,5 @@
 import json
-import whisper
-import torch
+from faster_whisper import WhisperModel
 from pathlib import Path
 from prefect import task
 
@@ -13,7 +12,7 @@ def transcribe_with_timestamps(wav_folder: str, speaker_label: str, language: st
 
     wav_files = Path(wav_folder).glob('*.wav')
 
-    model = whisper.load_model(whisper_model)
+    model = WhisperModel(whisper_model, device="auto")
     segment_dir.mkdir(exist_ok=True, parents=True)
     all_segments = []
     for wav_file in sorted(wav_files, key=lambda f: int(f.stem)):
@@ -27,22 +26,20 @@ def transcribe_with_timestamps(wav_folder: str, speaker_label: str, language: st
             all_segments.extend(segments)
             continue
 
-        # disable fp16 if running on CPU
-        use_fp16 = torch.cuda.is_available()
-        
-        result = model.transcribe(
+        segments, _ = model.transcribe(
             str(wav_file),
             language=language,
-            verbose=False,
-            fp16=use_fp16
         )
-        segments = result["segments"]
-        for seg in segments:
-            seg["speaker"] = speaker_label
-            seg["start"] = seg["start"] + offset
-            seg["end"] = seg["end"] + offset
-        segment_file.write_text(json.dumps(segments, indent=2))
-        all_segments.extend(segments)
+        segment_data = []
+        for segment in segments:
+            segment_data.append({
+                "start": segment.start + offset,
+                "end": segment.end + offset,
+                "text": segment.text,
+                "speaker": speaker_label,
+            })
+        segment_file.write_text(json.dumps(segment_data, indent=2))
+        all_segments.extend(segment_data)
     
     all_segments_file.write_text(json.dumps(all_segments, indent=2))
     return all_segments
